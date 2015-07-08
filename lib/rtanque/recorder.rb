@@ -4,9 +4,9 @@ module RTanque
 
     def self.create_runner(options)
       recorder = RTanque::Recorder.new(options)
-      
+
       Kernel.srand(options[:seed])
-      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks])
+      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
       runner.recorder = recorder
       runner.match.recorder = recorder
 
@@ -61,16 +61,16 @@ module RTanque
           width: width,
           height: height,
           max_ticks: max_ticks },
-        bots: {} }      
+        bots: {} }
     end
 
     def make_bot_data(bot)
-      { name: bot.name, 
-        iv: { 
-          position: bot.position, 
+      { name: bot.name,
+        iv: {
+          position: bot.position,
           heading: bot.heading,
           radar_heading: bot.radar.heading,
-          turret_heading: bot.turret.heading }, 
+          turret_heading: bot.turret.heading },
         commands: [] }
     end
 

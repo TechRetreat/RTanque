@@ -36,6 +36,7 @@ module RTanque
 
     def start
       self.tick until self.finished?
+      recorder.stop if recorder
     end
 
     def stop
@@ -65,8 +66,6 @@ module RTanque
     end
 
     def tick
-      recorder.stop if finished? && recorder
-
       self.shells.tick
       self.bots.tick
       self.explosions.tick

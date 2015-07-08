@@ -30,11 +30,11 @@ LONGDESC
   method_option :seed, :default => Kernel.srand, :type => :numeric, :banner => 'random number seed value'
   method_option :capture, :default => false, :type => :boolean, :banner => 'record the match'
   def start(*brain_paths)
-    if options[:capture] 
+    if options[:capture]
       runner = RTanque::Recorder.create_runner(options.merge(replay_dir: 'replays'))
     else
       Kernel.srand(options[:seed])
-      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams)
+      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
     end
 
     brain_paths.each do |brain_path|
@@ -136,7 +136,7 @@ LONGDESC
   def print_stats(indent = 2, &block)
     self.print_table([].tap(&block), :indent => indent)
   end
-  
+
 end
 
 RTanqueCLI.start
