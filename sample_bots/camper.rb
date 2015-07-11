@@ -2,12 +2,21 @@
 #
 # Enjoys sitting in the corners and firing powerful shots
 class Camper < RTanque::Bot::Brain
-  NAME = 'Camper'
-  include RTanque::Bot::BrainHelper
+  def name
+    'Camper'
+  end
 
-  CORNERS = [:NW, :NE, :SE, :SW]
-  TURRET_FIRE_RANGE = RTanque::Heading::ONE_DEGREE * 1.0
-  SWITCH_CORNER_TICK_RANGE = (600..1000)
+  def corners
+    [:NE, :NE, :SE, :SW]
+  end
+
+  def turret_fire_range
+    RTanque::Heading::ONE_DEGREE * 1.0
+  end
+
+  def switch_corner_tick_range
+    (600..1000)
+  end
 
   def tick!
     self.hide_in_corners
@@ -21,7 +30,7 @@ class Camper < RTanque::Bot::Brain
   def fire_upon(target)
     self.command.radar_heading = target.heading
     self.command.turret_heading = target.heading
-    if self.sensors.turret_heading.delta(target.heading).abs < TURRET_FIRE_RANGE
+    if self.sensors.turret_heading.delta(target.heading).abs < turret_fire_range
       self.command.fire(MAX_FIRE_POWER)
     end
   end
@@ -36,11 +45,11 @@ class Camper < RTanque::Bot::Brain
   end
 
   def hide_in_corners
-    @corner_cycle ||= CORNERS.shuffle.cycle
-    self.at_tick_interval(self.camp_interval) {
+    @corner_cycle ||= corners.shuffle.cycle
+    if self.sensors.ticks % self.camp_interval == 0
       self.corner = @corner_cycle.next
       self.reset_camp_interval
-    }
+    end
     self.corner ||= @corner_cycle.next
     self.move_to_corner
   end
@@ -74,6 +83,6 @@ class Camper < RTanque::Bot::Brain
   end
 
   def reset_camp_interval
-    @camp_interval = rand(SWITCH_CORNER_TICK_RANGE.max - SWITCH_CORNER_TICK_RANGE.min) + SWITCH_CORNER_TICK_RANGE.min
+    @camp_interval = rand(switch_corner_tick_range.max - switch_corner_tick_range.min) + switch_corner_tick_range.min
   end
 end

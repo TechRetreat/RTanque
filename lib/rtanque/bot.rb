@@ -37,6 +37,7 @@ module RTanque
     end
 
     def name
+      @name ||= self.brain.respond_to?(:name) ? self.brain.name : nil
       @name ||= self.brain.class.const_defined?(:NAME) ? self.brain.class.const_get(:NAME) : [self.brain.class.name, self.object_id].join(':')
     end
 
@@ -128,6 +129,6 @@ module RTanque
 
     def record_command(ticks, command)
       self.recorder.add(self, ticks, command) unless self.recorder.nil?
-    end    
+    end
   end
 end

@@ -22,7 +22,22 @@ module RTanque
     # @raise [RTanque::Runner::LoadError] if brain could not be loaded
     def add_brain_path(brain_path)
       parsed_path = self.parse_brain_path(brain_path)
-      bots = parsed_path.multiplier.times.map { self.new_bots_from_brain_path(parsed_path.path) }.flatten
+      fail LoadError unless File.exists? parsed_path.path
+      File.open parsed_path.path, 'r' do |file|
+        code = file.read
+        add_brain_code code, parsed_path.multiplier
+      end
+    end
+
+    def add_brain_code(code, num_bots = 1)
+      brains = num_bots.times.map do
+        begin
+          BotSandbox.new(code).bot
+        rescue ::LoadError
+          raise LoadError, 'Failed to load bot from code.'
+        end
+      end
+      bots = brains.map { |klass| RTanque::Bot.new_random_location(self.match.arena, klass) }
       self.recorder.add_bots(bots) if recording?
       self.match.add_bots(bots)
     end
@@ -46,37 +61,6 @@ module RTanque
     end
 
     protected
-
-    def new_bots_from_brain_path(brain_path)
-      self.fetch_brain_klasses(brain_path).map do |brain_klass|
-        RTanque::Bot.new_random_location(self.match.arena, brain_klass)
-      end
-    end
-
-    def fetch_brain_klasses(brain_path)
-      @load_brain_klass_cache ||= Hash.new do |cache, path|
-        cache[path] = self.get_diff_in_object_space(RTanque::Bot::Brain) {
-          begin
-            require(path)
-          rescue ::LoadError => e
-            raise LoadError, e.message
-          end
-        }
-        raise LoadError, "No class of type #{RTanque::Bot::Brain} found in #{path}" if cache[path].empty?
-        cache[path]
-      end
-      @load_brain_klass_cache[brain_path]
-    end
-
-    def get_diff_in_object_space(klass)
-      current_object_space = self.get_descendants_of_class(klass)
-      yield
-      self.get_descendants_of_class(klass) - current_object_space
-    end
-
-    def get_descendants_of_class(klass)
-      ::ObjectSpace.each_object(::Class).select {|k| k < klass }
-    end
 
     BRAIN_PATH_PARSER = /\A(.+?)\:[x|X](\d+)\z/
     # @!visibility private
