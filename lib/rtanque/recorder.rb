@@ -49,8 +49,8 @@ module RTanque
     def serialize
       `mkdir -p #{replay_dir}`
 
-      File.open("#{replay_dir}/last-match.yml",'w') do |file|
-        file.puts(save_data.to_yaml)
+      File.open("#{replay_dir}/last-match-testing.json",'w') do |file|
+        file.puts(save_data.to_json)
       end
     end
 
