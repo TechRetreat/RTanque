@@ -50,7 +50,9 @@ module RTanque
       `mkdir -p #{replay_dir}`
 
       File.open("#{replay_dir}/last-match-testing.json",'w') do |file|
-        file.puts(save_data.to_json)
+        data = YAML::load(save_data.to_yaml)
+        json = JSON.dump(data)
+        file.puts(json)
       end
     end
 
