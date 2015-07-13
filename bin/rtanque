@@ -5,7 +5,6 @@ require 'rtanque'
 require 'rtanque/runner'
 require 'octokit'
 require 'yaml'
-require 'json'
 
 class RTanqueCLI < Thor
   include Thor::Actions

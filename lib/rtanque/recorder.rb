@@ -49,10 +49,8 @@ module RTanque
     def serialize
       `mkdir -p #{replay_dir}`
 
-      File.open("#{replay_dir}/last-match-testing.json",'w') do |file|
-        data = YAML::load(save_data.to_yaml)
-        json = JSON.dump(data)
-        file.puts(json)
+      File.open("#{replay_dir}/last-match.yml",'w') do |file|
+        file.puts(save_data.to_yaml)
       end
     end
 
