@@ -2,6 +2,7 @@ module RTanque
   class Match
     attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams
     attr_accessor :recorder
+    attr_writer :after_tick
 
     def initialize(arena, max_ticks = nil, teams = false)
       @arena = arena
@@ -69,6 +70,7 @@ module RTanque
       self.shells.tick
       self.bots.tick
       self.explosions.tick
+      @after_tick.call(self) if @after_tick
       @ticks += 1
     end
   end
