@@ -17,9 +17,3 @@ module RTanque
     end
   end
 end
-
-require 'rtanque/gui/draw_group'
-require 'rtanque/gui/window'
-require 'rtanque/gui/bot'
-require 'rtanque/gui/shell'
-require 'rtanque/gui/explosion'
