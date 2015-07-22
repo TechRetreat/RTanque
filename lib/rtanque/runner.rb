@@ -22,8 +22,17 @@ module RTanque
     # @raise [RTanque::Runner::LoadError] if brain could not be loaded
     def add_brain_path(brain_path)
       parsed_path = self.parse_brain_path(brain_path)
-      fail LoadError unless File.exists? parsed_path.path
-      File.open parsed_path.path, 'r' do |file|
+      relative_path = File.expand_path parsed_path.path, File.expand_path('../../../', __FILE__)
+
+      if File.exists? parsed_path.path
+        path = parsed_path.path
+      elsif File.exists? relative_path
+        path = relative_path
+      else
+        fail LoadError, "Could not find file #{parsed_path.path}"
+      end
+
+      File.open path, 'r' do |file|
         code = file.read
         add_brain_code code, parsed_path.multiplier
       end
