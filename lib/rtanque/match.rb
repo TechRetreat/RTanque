@@ -2,7 +2,7 @@ module RTanque
   class Match
     attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams
     attr_accessor :recorder
-    attr_writer :after_tick
+    attr_writer :before_start, :after_tick, :after_stop
 
     def initialize(arena, max_ticks = nil, teams = false)
       @arena = arena
@@ -36,7 +36,9 @@ module RTanque
     end
 
     def start
+      @before_start.call(self) if @before_start
       self.tick until self.finished?
+      @after_stop.call(self) if @after_stop
       recorder.stop if recorder
     end
 
