@@ -1,6 +1,6 @@
 module RTanque
   class Match
-    attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams
+    attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams, :tick_data_array
     attr_accessor :recorder
     attr_writer :before_start, :after_tick, :after_stop
 
@@ -16,6 +16,7 @@ module RTanque
       @bots.post_tick(&method(:post_bot_tick))
       @shells.pre_tick(&method(:pre_shell_tick))
       @stopped = false
+      @tick_data_array = Array.new
     end
 
     def teams=(bool)
@@ -68,11 +69,48 @@ module RTanque
       end
     end
 
+    def getTankData
+      bot_array = Array.new
+      @bots.each { |bot|
+        bot_array.push name: bot.name, x: bot.position.x, y: bot.position.y, health: bot.health, heading: bot.heading.to_f,
+                       turret_heading: bot.radar.heading.to_f, radar_heading: bot.turret.heading.to_f
+      }
+      return bot_array
+    end
+
+    def getShellsCreated
+      created = Array.new
+      @shells.each { |shell|
+        created.push id: "test"
+      }
+      return created
+    end
+
+    def getShellsDestroyed
+      destroyed = Array.new
+      @shells.each { |shell|
+        destroyed.push id: "test"
+      }
+      return destroyed
+    end
+
+    def write_data
+      @tick_data_array.push tick: @ticks, tanks: getTankData, created: getShellsCreated, destroyed: getShellsDestroyed
+
+      if @ticks % 5 == 4
+        File.open("testing/last-match-test" + @ticks.to_s + ".txt",'w') do |file|
+          file.puts(@tick_data_array.to_s)
+        end
+        @tick_data_array = Array.new
+      end
+    end
+
     def tick
       self.shells.tick
       self.bots.tick
       self.explosions.tick
       @after_tick.call(self) if @after_tick
+      write_data
       @ticks += 1
     end
   end
