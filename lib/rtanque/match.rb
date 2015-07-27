@@ -1,8 +1,8 @@
 module RTanque
   class Match
-    attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams, :tick_data_array, :shells_created, :shells_destroyed, :shell_id
+    attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams, :shell_id
     attr_accessor :recorder
-    attr_writer :before_start, :after_tick, :after_stop
+    attr_writer :before_start, :after_tick, :after_stop, :shell_created, :shell_destroyed
 
     def initialize(arena, max_ticks = nil, teams = false)
       @arena = arena
@@ -16,12 +16,7 @@ module RTanque
       @bots.post_tick(&method(:post_bot_tick))
       @shells.pre_tick(&method(:pre_shell_tick))
       @stopped = false
-      @tick_data_array = Array.new
-      @shells_created = Array.new
-      @shells_destroyed = Array.new
       @shell_id = 0
-
-      `mkdir -p replays`
     end
 
     def teams=(bool)
@@ -60,8 +55,9 @@ module RTanque
       if bot.firing?
         # shell starts life at the end of the turret
         shell_position = bot.position.move(bot.turret.heading, RTanque::Bot::Turret::LENGTH)
-        @shells.add(RTanque::Shell.new(bot, shell_position, bot.turret.heading.clone, bot.fire_power, @shell_id))
-        @shells_created.push id: @shell_id, x: shell_position.x, y: shell_position.y, heading: bot.turret.heading.to_f, speed: bot.fire_power
+        shell = RTanque::Shell.new(bot, shell_position, bot.turret.heading.clone, bot.fire_power, @shell_id)
+        @shells.add(shell)
+        @shell_created.call(shell) if @shell_created
         @shell_id +=1
       end
     end
@@ -70,33 +66,10 @@ module RTanque
       shell.hits(self.bots.all_but(shell.bot)) do |origin_bot, bot_hit|
         damage = (shell.fire_power**RTanque::Shell::RATIO)
         bot_hit.reduce_health(damage)
-        @shells_destroyed.push id: shell.id
+        @shell_destroyed.call(shell) if @shell_created
         if bot_hit.dead?
           @explosions.add(Explosion.new(bot_hit.position))
         end
-      end
-    end
-
-    def getTankData
-      bot_array = Array.new
-      @bots.each { |bot|
-        bot_array.push name: bot.name, x: bot.position.x, y: bot.position.y, health: bot.health, heading: bot.heading.to_f,
-                       turret_heading: bot.radar.heading.to_f, radar_heading: bot.turret.heading.to_f
-      }
-      return bot_array
-    end
-
-    def write_data
-      @tick_data_array.push tick: @ticks, tanks: getTankData, created: @shells_created, destroyed: @shells_destroyed
-
-      @shells_created = Array.new
-      @shells_destroyed = Array.new
-
-      if @ticks % 5 == 4
-        File.open("replays/batch" + @ticks.to_s + ".txt",'w') do |file|
-          file.puts(@tick_data_array.to_s)
-        end
-        @tick_data_array = Array.new
       end
     end
 
@@ -105,7 +78,6 @@ module RTanque
       self.bots.tick
       self.explosions.tick
       @after_tick.call(self) if @after_tick
-      write_data
       @ticks += 1
     end
   end
