@@ -1,8 +1,8 @@
 module RTanque
   class Match
-    attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams
+    attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams, :shell_id
     attr_accessor :recorder
-    attr_writer :before_start, :after_tick, :after_stop, :after_death
+    attr_writer :before_start, :after_tick, :after_stop, :shell_created, :shell_destroyed, :after_death
 
     def initialize(arena, max_ticks = nil, teams = false)
       @arena = arena
@@ -16,6 +16,7 @@ module RTanque
       @bots.post_tick(&method(:post_bot_tick))
       @shells.pre_tick(&method(:pre_shell_tick))
       @stopped = false
+      @shell_id = 0
     end
 
     def teams=(bool)
@@ -54,7 +55,10 @@ module RTanque
       if bot.firing?
         # shell starts life at the end of the turret
         shell_position = bot.position.move(bot.turret.heading, RTanque::Bot::Turret::LENGTH)
-        @shells.add(RTanque::Shell.new(bot, shell_position, bot.turret.heading.clone, bot.fire_power))
+        shell = RTanque::Shell.new(bot, shell_position, bot.turret.heading.clone, bot.fire_power, @shell_id)
+        @shells.add(shell)
+        @shell_created.call(shell) if @shell_created
+        @shell_id +=1
       end
     end
 
@@ -62,6 +66,7 @@ module RTanque
       shell.hits(self.bots.all_but(shell.bot)) do |origin_bot, bot_hit|
         damage = (shell.fire_power**RTanque::Shell::RATIO)
         bot_hit.reduce_health(damage)
+        @shell_destroyed.call(shell) if @shell_created
         if bot_hit.dead?
           @explosions.add(Explosion.new(bot_hit.position))
         end
