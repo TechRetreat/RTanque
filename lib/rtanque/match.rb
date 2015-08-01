@@ -75,7 +75,7 @@ module RTanque
 
     def tick
       self.shells.tick
-      self.bots.each { |tank| @after_death.call(tank, match) if tank.dead? && @after_death }
+      self.bots.each { |tank| @after_death.call(tank, self) if tank.dead? && @after_death }
       self.bots.tick
       self.explosions.tick
       @after_tick.call(self) if @after_tick
