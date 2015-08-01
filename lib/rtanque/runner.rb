@@ -32,10 +32,8 @@ module RTanque
         fail LoadError, "Could not find file #{parsed_path.path}"
       end
 
-      File.open path, 'r' do |file|
-        code = file.read
-        add_brain_code code, parsed_path.multiplier
-      end
+      code = File.read path
+      add_brain_code code, parsed_path.multiplier
     end
 
     def add_brain_code(code, num_bots = 1)
@@ -49,6 +47,7 @@ module RTanque
       bots = brains.map { |klass| RTanque::Bot.new_random_location(self.match.arena, klass) }
       self.recorder.add_bots(bots) if recording?
       self.match.add_bots(bots)
+      bots
     end
 
     # Starts the match

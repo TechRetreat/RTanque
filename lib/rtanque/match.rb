@@ -2,7 +2,7 @@ module RTanque
   class Match
     attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams
     attr_accessor :recorder
-    attr_writer :before_start, :after_tick, :after_stop
+    attr_writer :before_start, :after_tick, :after_stop, :after_death
 
     def initialize(arena, max_ticks = nil, teams = false)
       @arena = arena
@@ -70,6 +70,7 @@ module RTanque
 
     def tick
       self.shells.tick
+      self.bots.each { |tank| @after_death.call(tank, match) if tank.dead? && @after_death }
       self.bots.tick
       self.explosions.tick
       @after_tick.call(self) if @after_tick
