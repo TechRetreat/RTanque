@@ -23,10 +23,11 @@ module RTanque
       end
     end
 
-    def initialize(arena, brain_klass = Brain)
+    def initialize(arena, brain_klass = Brain, name = nil)
       @arena = arena
       @brain = brain_klass.new(self.arena)
       @ticks = 0
+      @name = name
       self.health = self.class::MAX_HEALTH
       self.speed = 0
       self.fire_power = nil

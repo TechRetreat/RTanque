@@ -20,7 +20,7 @@ module RTanque
     # Attempts to load given {RTanque::Bot::Brain} given its path
     # @param [String] brain_path
     # @raise [RTanque::Runner::LoadError] if brain could not be loaded
-    def add_brain_path(brain_path)
+    def add_brain_path(brain_path, name = nil)
       parsed_path = self.parse_brain_path(brain_path)
       relative_path = File.expand_path parsed_path.path, File.expand_path('../../../', __FILE__)
 
@@ -33,10 +33,10 @@ module RTanque
       end
 
       code = File.read path
-      add_brain_code code, parsed_path.multiplier
+      add_brain_code code, parsed_path.multiplier, name
     end
 
-    def add_brain_code(code, num_bots = 1)
+    def add_brain_code(code, num_bots = 1, name = nil)
       brains = num_bots.times.map do
         begin
           BotSandbox.new(code).bot
@@ -44,7 +44,7 @@ module RTanque
           raise LoadError, 'Failed to load bot from code.'
         end
       end
-      bots = brains.map { |klass| RTanque::Bot.new_random_location(self.match.arena, klass) }
+      bots = brains.map { |klass| RTanque::Bot.new_random_location(self.match.arena, klass, name) }
       self.recorder.add_bots(bots) if recording?
       self.match.add_bots(bots)
       bots
