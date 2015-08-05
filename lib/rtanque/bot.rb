@@ -6,7 +6,7 @@ module RTanque
     RADIUS = Configuration.bot.radius
     MAX_GUN_ENERGY = Configuration.bot.gun_energy_max
     GUN_ENERGY_FACTOR = Configuration.bot.gun_energy_factor
-    attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer
+    attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer, :logs
     attr_accessor :gui_window, :recorder
     attr_normalized(:speed, Configuration.bot.speed, Configuration.bot.speed_step)
     attr_normalized(:heading, Heading::FULL_RANGE, Configuration.bot.turn_step)
@@ -83,7 +83,8 @@ module RTanque
 
     def tick_brain
       begin
-        self.execute_command(self.brain.tick(self.sensors))
+        logs = capture_output { self.execute_command(self.brain.tick(self.sensors)) }
+        @logs = logs.split "\n"
       rescue Exception => brain_error
         if Configuration.raise_brain_tick_errors
           raise brain_error
@@ -131,6 +132,19 @@ module RTanque
 
     def record_command(ticks, command)
       self.recorder.add(self, ticks, command) unless self.recorder.nil?
+    end
+
+    private
+
+    def capture_output
+      begin
+        old_stdout = $stdout
+        $stdout = StringIO.new '', 'w'
+        yield
+        $stdout.string
+      ensure
+        $stdout = old_stdout
+      end
     end
   end
 end
