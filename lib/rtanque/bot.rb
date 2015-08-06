@@ -92,6 +92,7 @@ module RTanque
         end
       rescue Exception => brain_error
         @error = brain_error
+        @logs ||= []
         if Configuration.raise_brain_tick_errors
           raise brain_error
         else
