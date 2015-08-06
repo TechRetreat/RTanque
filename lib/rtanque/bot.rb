@@ -1,12 +1,14 @@
 module RTanque
   class Bot
+    require 'timeout'
+
     include Movable
     extend NormalizedAttr
     HEALTH_REDUCTION_ON_EXCEPTION = Configuration.bot.health_reduction_on_exception
     RADIUS = Configuration.bot.radius
     MAX_GUN_ENERGY = Configuration.bot.gun_energy_max
     GUN_ENERGY_FACTOR = Configuration.bot.gun_energy_factor
-    attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer, :logs
+    attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer, :logs, :error
     attr_accessor :gui_window, :recorder
     attr_normalized(:speed, Configuration.bot.speed, Configuration.bot.speed_step)
     attr_normalized(:heading, Heading::FULL_RANGE, Configuration.bot.turn_step)
@@ -75,6 +77,7 @@ module RTanque
     end
 
     def tick
+      @error = nil
       @ticks += 1
       self.tick_brain
       self.adjust_fire_power
@@ -83,13 +86,15 @@ module RTanque
 
     def tick_brain
       begin
-        logs = capture_output { self.execute_command(self.brain.tick(self.sensors)) }
-        @logs = logs.split "\n"
+        Timeout::timeout(Configuration.tick_timeout) do
+          logs = capture_output { self.execute_command(self.brain.tick(self.sensors)) }
+          @logs = logs.split "\n"
+        end
       rescue Exception => brain_error
+        @error = brain_error
         if Configuration.raise_brain_tick_errors
           raise brain_error
         else
-          puts brain_error
           self.reduce_health(HEALTH_REDUCTION_ON_EXCEPTION)
         end
       end
