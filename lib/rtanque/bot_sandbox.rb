@@ -69,7 +69,7 @@ module RTanque
       privs.methods_of(RTanque::Arena).allow :width, :height
       privs.methods_of(RTanque::Point).allow :==, :within_radius?, :on_top_wall?, :on_bottom_wall?, :on_left_wall?,
                                              :on_right_wall?, :on_wall?, :outside_arena?, :move, :bind_to_arena,
-                                             :heading, :distance
+                                             :heading, :distance, :x, :y
       privs.methods_of(RTanque::Bot::Radar::Reflection).allow :heading, :distance, :name
 
       all_constants privs, %w(RTanque RTanque::Bot::Brain RTanque::Bot::BrainHelper)
