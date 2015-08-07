@@ -84,6 +84,14 @@ module RTanque
       super
     end
 
+    # Run block every 'num_of_ticks'
+    # @param [Integer] num_of_ticks tick interval at which to execute block
+    # @yield
+    # @return [void]
+    def at_tick_interval(num_of_ticks)
+      yield if @ticks % num_of_ticks == 0
+    end
+
     def tick_brain
       begin
         Timeout::timeout(Configuration.tick_timeout) do
