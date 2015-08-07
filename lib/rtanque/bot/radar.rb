@@ -18,7 +18,7 @@ module RTanque
 
       Reflection = Struct.new(:heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :name) do
         def self.new_from_points(from_position, enemy)
-          new(from_position.heading(enemy.position), from_position.distance(enemy.position), enemy.health, enemy.heading, enemy.speed, enemy.name)
+          self.new(from_position.heading(enemy.position), from_position.distance(enemy.position), enemy.health, enemy.heading, enemy.speed, enemy.name)
         end
       end
 
