@@ -7,6 +7,7 @@ module RTanque
       MIN_FIRE_POWER      = Bot::MIN_FIRE_POWER
       MAX_HEALTH          = Bot::MAX_HEALTH
       MAX_BOT_SPEED       = Bot::MAX_SPEED
+      SHELL_SPEED_FACTOR  = Shell::SHELL_SPEED_FACTOR
       MAX_BOT_ROTATION    = Configuration.bot.turn_step
       MAX_TURRET_ROTATION = Configuration.turret.turn_step
       MAX_RADAR_ROTATION  = Configuration.radar.turn_step
