@@ -33,6 +33,7 @@ module RTanque
       namespace.const_set :MAX_FIRE_POWER, Bot::MAX_FIRE_POWER
       namespace.const_set :MIN_FIRE_POWER, Bot::MIN_FIRE_POWER
       namespace.const_set :MAX_HEALTH, Bot::MAX_HEALTH
+      namespace.const_set :SHELL_SPEED_FACTOR, Shell::SHELL_SPEED_FACTOR
       namespace.const_set :MAX_BOT_SPEED, Bot::MAX_SPEED
       namespace.const_set :MAX_BOT_ROTATION, Configuration.bot.turn_step
       namespace.const_set :MAX_TURRET_ROTATION, Configuration.turret.turn_step
