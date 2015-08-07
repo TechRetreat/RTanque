@@ -16,7 +16,7 @@ module RTanque
       # @attr_reader [RTanque::Heading] enemy_heading
       # @attr_reader [Float] enemy_speed
 
-      Reflection = Struct.new(:heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :name) do
+      Reflection = Struct.new(:heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name) do
         def self.new_from_points(from_position, enemy)
           self.new(from_position.heading(enemy.position), from_position.distance(enemy.position), enemy.health, enemy.heading, enemy.speed, enemy.name)
         end
@@ -52,10 +52,6 @@ module RTanque
 
       def can_detect?(other_bot)
         VISION_RANGE.include?(Heading.delta_between_points(self.position, self.heading, other_bot.position))
-      end
-
-      def closest
-        min { |a,b| a.distance <=> b.distance }
       end
     end
   end
