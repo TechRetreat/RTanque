@@ -32,10 +32,6 @@ module RTanque
       def gui_window=(gui_window)
         @gui_window = gui_window
       end
-
-      def closest
-        radar.min { |a,b| a.distance <=> b.distance }
-      end
     end
   end
 end
