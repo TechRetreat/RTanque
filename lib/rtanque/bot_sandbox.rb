@@ -58,6 +58,7 @@ module RTanque
       privs.instances_of(String).allow_all
       privs.instances_of(Symbol).allow_all
       privs.instances_of(Range).allow_all
+      privs.instances_of(NilClass).allow_all
 
       privs.methods_of(Module).allow :include # Pretty sure include doesn't actually work in the sandbox anyway :/
       privs.methods_of(RTanque::Heading).allow_all
