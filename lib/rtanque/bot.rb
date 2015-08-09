@@ -152,5 +152,9 @@ module RTanque
         $stdout = old_stdout
       end
     end
+
+    def width
+      50
+    end
   end
 end

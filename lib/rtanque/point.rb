@@ -109,23 +109,23 @@ module RTanque
       self.y > self.arena.height || self.y < 0 || self.x > self.arena.width || self.x < 0
     end
 
-    def move(heading, speed, bound_to_arena = true)
+    def move(heading, speed, bound_to_arena = true, width = 0)
       # round to avoid floating point errors
       x = (self.x + (Math.sin(heading) * speed)).round(10)
       y = (self.y + (Math.cos(heading) * speed)).round(10)
-      self.class.new(x, y, self.arena) { |point| point.bind_to_arena if bound_to_arena }
+      self.class.new(x, y, self.arena) { |point| point.bind_to_arena(width) if bound_to_arena}
     end
 
-    def bind_to_arena
-      if self.x < 0
-        self.x = 0.0
-      elsif self.x > self.arena.width
-        self.x = self.arena.width.to_f
+    def bind_to_arena(width)
+      if self.x < width
+        self.x = width
+      elsif self.x > self.arena.width - width
+        self.x = self.arena.width.to_f - width
       end
-      if self.y < 0
-        self.y = 0.0
-      elsif self.y > self.arena.height
-        self.y = self.arena.height.to_f
+      if self.y < width
+        self.y = width
+      elsif self.y > self.arena.height - width
+        self.y = self.arena.height.to_f - width
       end
     end
 

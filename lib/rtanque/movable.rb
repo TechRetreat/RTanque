@@ -29,7 +29,7 @@ module RTanque
     end
 
     def update_position
-      @position = @position.move(self.heading, self.speed, self.bound_to_arena)
+      @position = @position.move(self.heading, self.speed, self.bound_to_arena, self.width)
     end
 
     def heading
