@@ -63,7 +63,7 @@ module RTanque
       privs.methods_of(Module).allow :include # Pretty sure include doesn't actually work in the sandbox anyway :/
       privs.methods_of(RTanque::Heading).allow_all
       privs.methods_of(RTanque::Bot::Brain).allow :command, :sensors, :arena
-      privs.allow_const_read "Math"
+      privs.allow_const_read "Math" "Enumerator" "Enumerable" "Array" "Hash" "Fixnum" "Float" "String" "Symbol" "Range" "NilClass" "TrueClass" "FalseClass"
       privs.methods_of(RTanque::Bot::Command).allow :speed, :speed=, :heading, :heading=, :radar_heading,
                                                     :radar_heading=, :turret_heading, :turret_heading=, :fire_power,
                                                     :fire_power=, :fire
