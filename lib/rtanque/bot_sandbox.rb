@@ -50,6 +50,7 @@ module RTanque
       privs.object(RTanque::Point).allow :new, :rand, :distance
 
       privs.instances_of(Class).allow_all
+      privs.instances_of(Object).allow_all
       privs.instances_of(Enumerator).allow_all
       privs.instances_of(Enumerable).allow_all
       privs.instances_of(Array).allow_all
@@ -75,7 +76,45 @@ module RTanque
                                              :heading, :distance, :x, :y
       privs.methods_of(RTanque::Bot::Radar::Reflection).allow :heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name
 
-      all_constants privs, %w(RTanque RTanque::Bot::Brain RTanque::Bot::BrainHelper Class Array Enumerator Enumerable Math Hash Fixnum Float String Symbol Range NilClass TrueClass FalseClass Bignum)
+      all_constants privs, %w(
+RTanque
+RTanque::Bot::Brain
+RTanque::Bot::BrainHelper
+
+ArgumentError
+Array
+BasicObject
+Bignum
+Class
+Comparable
+ConditionVariable
+Enumerator
+Enumerable
+Enumerator::Generator
+Enumerator::Lazy
+Enumerator::Yielder
+Hash
+Fixnum
+FalseClass
+Float
+IndexError
+Math
+Math::DomainError
+Method
+NilClass
+Numeric
+Object
+String
+Symbol
+Random
+Range
+Rational
+String
+Struct
+Symbol
+Time
+TrueClass
+Bignum)
       all_constants privs, get_constants(RTanque::Heading)
       all_constants privs, get_constants(RTanque::Bot::BrainHelper)
 
