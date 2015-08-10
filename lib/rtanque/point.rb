@@ -62,15 +62,16 @@ module RTanque
   # @!method on_wall?
   #    True if on any wall
   #    @return [Boolean]
-  Point = Struct.new(:x, :y, :arena) do
+  Point = Struct.new(:x, :y, :arena, :width) do
     def initialize(*args, &block)
       super
+      self.width ||= 0
       block.call(self) if block
       self.freeze
     end
 
-    def self.rand(arena)
-      self.new(Kernel.rand(arena.width), Kernel.rand(arena.height), arena)
+    def self.rand(arena, width = 0)
+      self.new(Kernel.rand(arena.width), Kernel.rand(arena.height), arena, width)
     end
 
     def self.distance(a, b)
@@ -86,19 +87,19 @@ module RTanque
     end
 
     def on_top_wall?
-      self.y >= self.arena.height
+      self.y >= self.arena.height - self.width
     end
 
     def on_bottom_wall?
-      self.y <= 0
+      self.y <= 0 + self.width
     end
 
     def on_left_wall?
-      self.x <= 0
+      self.x <= 0 + self.width
     end
 
     def on_right_wall?
-      self.x >= self.arena.width
+      self.x >= self.arena.width - self.width
     end
 
     def on_wall?
@@ -106,17 +107,17 @@ module RTanque
     end
 
     def outside_arena?
-      self.y > self.arena.height || self.y < 0 || self.x > self.arena.width || self.x < 0
+      self.y > self.arena.height - self.width || self.y < 0 + self.width || self.x > self.arena.width - self.width || self.x < 0 + self.width
     end
 
-    def move(heading, speed, bound_to_arena = true, width = 0)
+    def move(heading, speed, bound_to_arena = true, width = self.width)
       # round to avoid floating point errors
       x = (self.x + (Math.sin(heading) * speed)).round(10)
       y = (self.y + (Math.cos(heading) * speed)).round(10)
       self.class.new(x, y, self.arena) { |point| point.bind_to_arena(width) if bound_to_arena}
     end
 
-    def bind_to_arena(width)
+    def bind_to_arena(width = self.width)
       if self.x < width
         self.x = width
       elsif self.x > self.arena.width - width

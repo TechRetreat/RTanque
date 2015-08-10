@@ -18,7 +18,7 @@ module RTanque
     def self.new_random_location(*args)
       self.new(*args).tap do |bot|
         rand_heading = Heading.rand
-        bot.position = Point.rand(bot.arena)
+        bot.position = Point.rand(bot.arena, RADIUS)
         bot.heading = rand_heading
         bot.radar.heading = rand_heading
         bot.turret.heading = rand_heading
@@ -35,7 +35,7 @@ module RTanque
       self.speed = 0
       self.fire_power = nil
       self.heading = Heading.new
-      self.position = Point.new(0, 0, self.arena)
+      self.position = Point.new(0, 0, self.arena, @width)
       @radar = Radar.new(self, self.heading.clone)
       @turret = Turret.new(self.heading.clone)
     end
