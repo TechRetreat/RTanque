@@ -49,6 +49,7 @@ module RTanque
       privs.object(RTanque::Heading).allow :new_from_degrees, :new_between_points, :delta_between_points, :rand, :new
       privs.object(RTanque::Point).allow :new, :rand, :distance
 
+      privs.instances_of(Class).allow_all
       privs.instances_of(Enumerator).allow_all
       privs.instances_of(Enumerable).allow_all
       privs.instances_of(Array).allow_all
@@ -63,7 +64,6 @@ module RTanque
       privs.methods_of(Module).allow :include # Pretty sure include doesn't actually work in the sandbox anyway :/
       privs.methods_of(RTanque::Heading).allow_all
       privs.methods_of(RTanque::Bot::Brain).allow :command, :sensors, :arena
-      privs.allow_const_read "Math" "Enumerator" "Enumerable" "Array" "Hash" "Fixnum" "Float" "String" "Symbol" "Range" "NilClass" "TrueClass" "FalseClass"
       privs.methods_of(RTanque::Bot::Command).allow :speed, :speed=, :heading, :heading=, :radar_heading,
                                                     :radar_heading=, :turret_heading, :turret_heading=, :fire_power,
                                                     :fire_power=, :fire
@@ -75,7 +75,7 @@ module RTanque
                                              :heading, :distance, :x, :y
       privs.methods_of(RTanque::Bot::Radar::Reflection).allow :heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name
 
-      all_constants privs, %w(RTanque RTanque::Bot::Brain RTanque::Bot::BrainHelper)
+      all_constants privs, %w(RTanque RTanque::Bot::Brain RTanque::Bot::BrainHelper Class Array Enumerator Enumerable Math Hash Fixnum Float String Symbol Range NilClass TrueClass FalseClass Bignum)
       all_constants privs, get_constants(RTanque::Heading)
       all_constants privs, get_constants(RTanque::Bot::BrainHelper)
 
