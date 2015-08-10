@@ -23,8 +23,9 @@ module RTanque
       attr_reader :arena
 
       # @!visibility private
-      def initialize(arena)
+      def initialize(arena, logger = nil)
         @arena = arena
+        @logger = logger
       end
 
       # @!visibility private
@@ -52,6 +53,10 @@ module RTanque
       # @return [void]
       def at_tick_interval(num_of_ticks)
         yield if @ticks % num_of_ticks == 0
+      end
+
+      def puts(msg)
+        @logger.call msg if @logger
       end
     end
   end

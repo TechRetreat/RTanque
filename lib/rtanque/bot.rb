@@ -27,7 +27,7 @@ module RTanque
 
     def initialize(arena, brain_klass = Brain, name = nil)
       @arena = arena
-      @brain = brain_klass.new(self.arena)
+      @brain = brain_klass.new(self.arena, method(:log))
       @ticks = 0
       @name = name
       @width = RADIUS
@@ -79,6 +79,7 @@ module RTanque
 
     def tick
       @error = nil
+      @logs = []
       @ticks += 1
       self.tick_brain
       self.adjust_fire_power
@@ -88,8 +89,7 @@ module RTanque
     def tick_brain
       begin
         Timeout::timeout(Configuration.tick_timeout) do
-          logs = capture_output { self.execute_command(self.brain.tick(self.sensors)) }
-          @logs = logs.split "\n"
+          self.execute_command self.brain.tick(self.sensors)
         end
       rescue Exception => brain_error
         @error = brain_error
@@ -141,17 +141,8 @@ module RTanque
       self.recorder.add(self, ticks, command) unless self.recorder.nil?
     end
 
-    private
-
-    def capture_output
-      begin
-        old_stdout = $stdout
-        $stdout = StringIO.new '', 'w'
-        yield
-        $stdout.string
-      ensure
-        $stdout = old_stdout
-      end
+    def log(message)
+      @logs << message
     end
   end
 end
