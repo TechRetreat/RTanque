@@ -8,7 +8,7 @@ module RTanque
     RADIUS = Configuration.bot.radius
     MAX_GUN_ENERGY = Configuration.bot.gun_energy_max
     GUN_ENERGY_FACTOR = Configuration.bot.gun_energy_factor
-    attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer, :logs, :error
+    attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer, :logs, :error, :width
     attr_accessor :gui_window, :recorder
     attr_normalized(:speed, Configuration.bot.speed, Configuration.bot.speed_step)
     attr_normalized(:heading, Heading::FULL_RANGE, Configuration.bot.turn_step)
@@ -30,6 +30,7 @@ module RTanque
       @brain = brain_klass.new(self.arena)
       @ticks = 0
       @name = name
+      @width = RADIUS
       self.health = self.class::MAX_HEALTH
       self.speed = 0
       self.fire_power = nil
@@ -151,10 +152,6 @@ module RTanque
       ensure
         $stdout = old_stdout
       end
-    end
-
-    def width
-      50
     end
   end
 end

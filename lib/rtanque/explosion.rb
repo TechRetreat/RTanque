@@ -1,11 +1,12 @@
 module RTanque
   class Explosion
     include Movable
-    attr_reader :position
+    attr_reader :position, :width
     LIFE_SPAN = Configuration.explosion.life_span # ticks
     def initialize(position)
       @position = position
       @ticks = 0
+      @width = 0
     end
 
     def percent_dead

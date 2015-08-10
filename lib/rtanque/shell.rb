@@ -3,7 +3,7 @@ module RTanque
     include Movable
     RATIO = Configuration.shell.ratio
     SHELL_SPEED_FACTOR = Configuration.shell.speed_factor
-    attr_reader :bot, :arena, :fire_power, :id
+    attr_reader :bot, :arena, :fire_power, :id, :width
 
     def self.speed fire_power
       fire_power * SHELL_SPEED_FACTOR
@@ -14,6 +14,7 @@ module RTanque
       @arena = bot.arena
       @fire_power = fire_power
       @id = id
+      @width = 0
       self.position = position
       self.heading = heading
       self.speed = self.class.speed(fire_power) # TODO: add bot's relative speed in this heading
