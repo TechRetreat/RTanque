@@ -31,7 +31,6 @@ module RTanque
 
     def stop
       unless @stopped
-        serialize
         @stopped = true
       end
     end
@@ -44,14 +43,6 @@ module RTanque
 
     def []=(bot, value)
       save_data[:bots][bot.object_id.to_s] = value
-    end
-
-    def serialize
-      `mkdir -p #{replay_dir}`
-
-      File.open("#{replay_dir}/last-match.yml",'w') do |file|
-        file.puts(save_data.to_yaml)
-      end
     end
 
     def make_save_data(seed, width, height, max_ticks)

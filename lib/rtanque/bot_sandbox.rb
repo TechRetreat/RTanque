@@ -13,7 +13,7 @@ module RTanque
         @bot
       else
         sandbox = Sandbox.new
-        privs = create_priviliges
+        privs = create_privileges
         add_helpers sandbox.base_namespace
         bots = get_diff_in_object_space(RTanque::Bot::Brain) do
           sandbox.run privs, @code
@@ -40,7 +40,7 @@ module RTanque
       namespace.const_set :MAX_RADAR_ROTATION, Configuration.radar.turn_step
     end
 
-    def create_priviliges
+    def create_privileges
       privs = Privileges.new
 
       privs.allow_method :puts
@@ -63,6 +63,7 @@ module RTanque
       privs.methods_of(Module).allow :include # Pretty sure include doesn't actually work in the sandbox anyway :/
       privs.methods_of(RTanque::Heading).allow_all
       privs.methods_of(RTanque::Bot::Brain).allow :command, :sensors, :arena
+      privs.allow_const_read "Math"
       privs.methods_of(RTanque::Bot::Command).allow :speed, :speed=, :heading, :heading=, :radar_heading,
                                                     :radar_heading=, :turret_heading, :turret_heading=, :fire_power,
                                                     :fire_power=, :fire
