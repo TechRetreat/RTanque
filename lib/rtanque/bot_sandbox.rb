@@ -72,8 +72,7 @@ module RTanque
                                                     :turret_heading, :gun_energy
       privs.methods_of(RTanque::Arena).allow :width, :height
       privs.methods_of(RTanque::Point).allow :==, :within_radius?, :on_top_wall?, :on_bottom_wall?, :on_left_wall?,
-                                             :on_right_wall?, :on_wall?, :outside_arena?, :move, :bind_to_arena,
-                                             :heading, :distance, :x, :y
+                                             :on_right_wall?, :on_wall?, :outside_arena?, :heading, :distance, :x, :y
       privs.methods_of(RTanque::Bot::Radar::Reflection).allow :heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name
 
       all_constants privs, %w(

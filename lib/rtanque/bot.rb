@@ -136,7 +136,6 @@ module RTanque
     end
 
     def record_command(ticks, command)
-      self.recorder.add(self, ticks, command) unless self.recorder.nil?
     end
 
     def log(message)

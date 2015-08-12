@@ -54,7 +54,8 @@ module RTanque
     def post_bot_tick(bot)
       if bot.firing?
         # shell starts life at the end of the turret
-        shell_position = bot.position.move(bot.turret.heading, RTanque::Bot::Turret::LENGTH)
+        shell_position = bot.position.clone
+        shell_position.move(bot.turret.heading, RTanque::Bot::Turret::LENGTH)
         shell = RTanque::Shell.new(bot, shell_position, bot.turret.heading.clone, bot.fire_power, @shell_id)
         @shells.add(shell)
         @shell_created.call(shell) if @shell_created
