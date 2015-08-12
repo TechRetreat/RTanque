@@ -1,3 +1,4 @@
+require 'ruby-prof'
 # Add the working directory so that loading of bots works as expected
 $LOAD_PATH << Dir.pwd
 # Add the gem root dir so that sample_bots can be loaded
@@ -59,8 +60,13 @@ module RTanque
         trap(:INT) { window.close }
         window.show
       else
+        RubyProf.measure_mode = RubyProf::PROCESS_TIME
+        RubyProf.start
         trap(:INT) { self.match.stop }
         self.match.start
+        result = RubyProf.stop
+        printer = RubyProf::FlatPrinterWithLineNumbers.new(result)
+        printer.print(STDOUT)
       end
     end
 
