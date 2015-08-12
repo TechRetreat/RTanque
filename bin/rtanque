@@ -29,13 +29,9 @@ LONGDESC
   method_option :seed, :default => Kernel.srand, :type => :numeric, :banner => 'random number seed value'
   method_option :capture, :default => false, :type => :boolean, :banner => 'record the match'
   def start(*brain_paths)
-    if options[:capture]
-      Kernel.srand(options[:seed])
-      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
-    else
-      Kernel.srand(options[:seed])
-      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
-    end
+    optionsMerged = options.merge(replay_dir: 'replays')
+    Kernel.srand(options[:seed])
+    runner = RTanque::Runner.new(optionsMerged[:width], optionsMerged[:height], optionsMerged[:max_ticks], optionsMerged[:teams])
 
     brain_paths.each do |brain_path|
       begin
