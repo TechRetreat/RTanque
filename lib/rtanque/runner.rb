@@ -62,6 +62,7 @@ module RTanque
       else
         RubyProf.measure_mode = RubyProf::PROCESS_TIME
         RubyProf.start
+        # RubyProf.pause
         trap(:INT) { self.match.stop }
         self.match.start
         result = RubyProf.stop
