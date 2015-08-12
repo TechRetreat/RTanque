@@ -2,6 +2,8 @@
 #
 # Enjoys sitting in the corners and firing powerful shots
 class Camper < RTanque::Bot::Brain
+  include RTanque::Bot::BrainHelper
+
   def name
     'Camper'
   end

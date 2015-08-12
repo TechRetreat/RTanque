@@ -21,7 +21,7 @@ module RTanque
     # Attempts to load given {RTanque::Bot::Brain} given its path
     # @param [String] brain_path
     # @raise [RTanque::Runner::LoadError] if brain could not be loaded
-    def add_brain_path(brain_path, name = nil)
+    def add_brain_path(brain_path, name = nil, sandbox = false)
       parsed_path = self.parse_brain_path(brain_path)
       relative_path = File.expand_path parsed_path.path, File.expand_path('../../../', __FILE__)
 
@@ -34,13 +34,13 @@ module RTanque
       end
 
       code = File.read path
-      add_brain_code code, parsed_path.multiplier, name
+      add_brain_code code, parsed_path.multiplier, name, sandbox
     end
 
-    def add_brain_code(code, num_bots = 1, name = nil)
+    def add_brain_code(code, num_bots = 1, name = nil, sandbox = false)
       brains = num_bots.times.map do
         begin
-          BotSandbox.new(code).bot
+          BotSandbox.new(code, sandbox).bot
         rescue ::LoadError
           raise LoadError, 'Failed to load bot from code.'
         end
