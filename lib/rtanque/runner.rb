@@ -8,7 +8,6 @@ module RTanque
   class Runner
     LoadError = Class.new(::LoadError)
     attr_reader :match
-    attr_accessor :recorder, :replayer
 
     # @param [Integer] width
     # @param [Integer] height
@@ -45,7 +44,6 @@ module RTanque
         end
       end
       bots = brains.map { |klass| RTanque::Bot.new_random_location(self.match.arena, klass, name) }
-      self.recorder.add_bots(bots) if recording?
       self.match.add_bots(bots)
       bots
     end
@@ -55,10 +53,6 @@ module RTanque
     def start(gui = false)
       trap(:INT) { self.match.stop }
       self.match.start
-    end
-
-    def recording?
-      !self.recorder.nil?
     end
 
     protected

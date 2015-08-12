@@ -102,8 +102,6 @@ module RTanque
     end
 
     def execute_command(command)
-      self.record_command(self.ticks, command)
-
       self.fire_power = self.normalize_fire_power(self.fire_power, command.fire_power)
       self.speed = self.normalize_speed(self.speed, command.speed)
       self.heading = self.normalize_heading(self.heading, command.heading)
@@ -133,9 +131,6 @@ module RTanque
         empty_command.radar_heading = self.radar.heading
         empty_command.turret_heading = self.turret.heading
       end
-    end
-
-    def record_command(ticks, command)
     end
 
     def log(message)
