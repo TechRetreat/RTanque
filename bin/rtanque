@@ -46,22 +46,6 @@ LONGDESC
     self.print_runner_stats(runner) unless options[:quiet]
   end
 
-  desc "replay <path_to_replay>", "Replays a previous match"
-  method_option :gc, :default => true, :type => :boolean, :banner => 'disable GC (EXPERIMENTAL)'
-  method_option :quiet, :aliases => '-q', :default => false, :type => :boolean, :banner => 'disable chatter'
-  def replay(replay_path)
-    begin
-      runner = RTanque::Replayer.create_runner(replay_path)
-    rescue RTanque::Replayer::LoadError => e
-      say e.message, :red
-      exit false
-    end
-
-    self.print_start_banner(runner) unless options[:quiet]
-    self.set_gc(options[:gc]) { runner.start }
-    self.print_runner_stats(runner) unless options[:quiet]
-  end
-
   desc "new_bot <bot_name>", "Creates a new bot"
   long_desc <<-LONGDESC
 Helper to create a basic brain template in the bots directory
