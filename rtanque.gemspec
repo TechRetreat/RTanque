@@ -30,6 +30,4 @@ Have fun competing against friends' tanks or the sample ones included. Maybe you
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'rspec', '~> 2.13.0'
   gem.add_development_dependency 'rspec-mocks', '~> 2.13.0'
-  gem.add_development_dependency 'gosu', '~> 0.7.45'
-  gem.add_development_dependency 'texplay'
 end
