@@ -31,7 +31,8 @@ LONGDESC
   method_option :capture, :default => false, :type => :boolean, :banner => 'record the match'
   def start(*brain_paths)
     if options[:capture]
-      runner = create_runner(options.merge(replay_dir: 'replays'))
+      Kernel.srand(options[:seed])
+      runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
     else
       Kernel.srand(options[:seed])
       runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
@@ -57,12 +58,6 @@ LONGDESC
     self.print_start_banner(runner) unless options[:quiet]
     self.set_gc(options[:gc]) { runner.start(gui) }
     self.print_runner_stats(runner) unless options[:quiet]
-  end
-
-  def create_runner(options)
-    Kernel.srand(options[:seed])
-    runner = RTanque::Runner.new(options[:width], options[:height], options[:max_ticks], options[:teams])
-    runner
   end
 
   desc "replay <path_to_replay>", "Replays a previous match"
