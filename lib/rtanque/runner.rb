@@ -52,13 +52,7 @@ module RTanque
 
     # Starts the match
     # @param [Boolean] gui if false, runs headless match
-    def start(gui = true)
-      if gui
-        require 'rtanque/gui'
-        window = RTanque::Gui::Window.new(self.match)
-        trap(:INT) { window.close }
-        window.show
-      else
+    def start(gui = false)
         trap(:INT) { self.match.stop }
         self.match.start
       end
