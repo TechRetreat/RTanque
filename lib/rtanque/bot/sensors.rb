@@ -22,7 +22,6 @@ module RTanque
 
       def button_down?(button_id)
           false
-        end
       end
     end
   end
