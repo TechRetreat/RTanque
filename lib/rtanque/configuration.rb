@@ -35,12 +35,6 @@ module RTanque
     explosion do
       life_span 70 * 1 # should be multiple of the number of frames in the explosion animation
     end
-    gui do
-      update_interval 16.666666 # in milliseconds. 16.666666 == 60 FPS
-      fonts do
-        small 16
-      end
-    end
   end
   def Configuration.config(&block)
     ::Configuration::DSL.evaluate(self, &block)

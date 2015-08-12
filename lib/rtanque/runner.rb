@@ -49,8 +49,7 @@ module RTanque
     end
 
     # Starts the match
-    # @param [Boolean] gui if false, runs headless match
-    def start(gui = false)
+    def start
       trap(:INT) { self.match.stop }
       self.match.start
     end
