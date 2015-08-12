@@ -122,7 +122,6 @@ module RTanque
         sensors.radar_heading = self.radar.heading
         sensors.gun_energy = self.gun_energy
         sensors.turret_heading = self.turret.heading
-        sensors.gui_window = self.gui_window
       end
     end
 
