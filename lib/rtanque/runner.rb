@@ -53,9 +53,8 @@ module RTanque
     # Starts the match
     # @param [Boolean] gui if false, runs headless match
     def start(gui = false)
-        trap(:INT) { self.match.stop }
-        self.match.start
-      end
+      trap(:INT) { self.match.stop }
+      self.match.start
     end
 
     def recording?
