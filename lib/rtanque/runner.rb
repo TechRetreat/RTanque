@@ -9,7 +9,6 @@ module RTanque
   class Runner
     LoadError = Class.new(::LoadError)
     attr_reader :match
-    attr_accessor :recorder, :replayer
 
     # @param [Integer] width
     # @param [Integer] height
@@ -46,20 +45,13 @@ module RTanque
         end
       end
       bots = brains.map { |klass| RTanque::Bot.new_random_location(self.match.arena, klass, name) }
-      self.recorder.add_bots(bots) if recording?
       self.match.add_bots(bots)
       bots
     end
 
     # Starts the match
     # @param [Boolean] gui if false, runs headless match
-    def start(gui = true, profile = false)
-      if gui
-        require 'rtanque/gui'
-        window = RTanque::Gui::Window.new(self.match)
-        trap(:INT) { window.close }
-        window.show
-      else
+    def start(profile = false)
         if profile
           RubyProf.measure_mode = RubyProf::PROCESS_TIME
           RubyProf.start
@@ -72,7 +64,6 @@ module RTanque
           printer = RubyProf::FlatPrinterWithLineNumbers.new(result)
           printer.print(STDOUT)
         end
-      end
     end
 
     def recording?

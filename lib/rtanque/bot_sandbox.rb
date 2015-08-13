@@ -57,18 +57,19 @@ module RTanque
       privs.object(RTanque::Heading).allow :new_from_degrees, :new_between_points, :delta_between_points, :rand, :new
       privs.object(RTanque::Point).allow :new, :rand, :distance
 
-      privs.instances_of(Class).allow_all
-      privs.instances_of(Object).allow_all
-      privs.instances_of(Enumerator).allow_all
-      privs.instances_of(Enumerable).allow_all
       privs.instances_of(Array).allow_all
-      privs.instances_of(Hash).allow_all
+      privs.instances_of(Class).allow_all
+      privs.instances_of(Comparable).allow_all
+      privs.instances_of(Enumerable).allow_all
+      privs.instances_of(Enumerator).allow_all
       privs.instances_of(Fixnum).allow_all
       privs.instances_of(Float).allow_all
+      privs.instances_of(Hash).allow_all
+      privs.instances_of(NilClass).allow_all
+      privs.instances_of(Object).allow_all
+      privs.instances_of(Range).allow_all
       privs.instances_of(String).allow_all
       privs.instances_of(Symbol).allow_all
-      privs.instances_of(Range).allow_all
-      privs.instances_of(NilClass).allow_all
 
       privs.methods_of(Module).allow :include # Pretty sure include doesn't actually work in the sandbox anyway :/
       privs.methods_of(RTanque::Heading).allow_all
@@ -80,8 +81,7 @@ module RTanque
                                                     :turret_heading, :gun_energy
       privs.methods_of(RTanque::Arena).allow :width, :height
       privs.methods_of(RTanque::Point).allow :==, :within_radius?, :on_top_wall?, :on_bottom_wall?, :on_left_wall?,
-                                             :on_right_wall?, :on_wall?, :outside_arena?, :move, :bind_to_arena,
-                                             :heading, :distance, :x, :y
+                                             :on_right_wall?, :on_wall?, :outside_arena?, :heading, :distance, :x, :y
       privs.methods_of(RTanque::Bot::Radar::Reflection).allow :heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name
 
       all_constants privs, %w(
@@ -121,8 +121,7 @@ String
 Struct
 Symbol
 Time
-TrueClass
-Bignum)
+TrueClass)
       all_constants privs, get_constants(RTanque::Heading)
       all_constants privs, get_constants(RTanque::Bot::BrainHelper)
 

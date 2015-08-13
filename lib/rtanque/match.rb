@@ -1,7 +1,6 @@
 module RTanque
   class Match
     attr_reader :arena, :bots, :shells, :explosions, :ticks, :max_ticks, :teams, :shell_id
-    attr_accessor :recorder
     attr_writer :before_start, :after_tick, :after_stop, :shell_created, :shell_destroyed, :after_death
 
     def initialize(arena, max_ticks = nil, teams = false)
@@ -40,7 +39,6 @@ module RTanque
       @before_start.call(self) if @before_start
       self.tick until self.finished?
       @after_stop.call(self) if @after_stop
-      recorder.stop if recorder
     end
 
     def stop
@@ -54,7 +52,8 @@ module RTanque
     def post_bot_tick(bot)
       if bot.firing?
         # shell starts life at the end of the turret
-        shell_position = bot.position.move(bot.turret.heading, RTanque::Bot::Turret::LENGTH)
+        shell_position = bot.position.clone
+        shell_position.move(bot.turret.heading, RTanque::Bot::Turret::LENGTH)
         shell = RTanque::Shell.new(bot, shell_position, bot.turret.heading.clone, bot.fire_power, @shell_id)
         @shells.add(shell)
         @shell_created.call(shell) if @shell_created
