@@ -1,6 +1,6 @@
 module RTanque
   class BotSandbox
-    require 'shikashi-the-north'
+    require 'shikashi'
     include Shikashi
 
     def initialize(code, sandboxed = false)
