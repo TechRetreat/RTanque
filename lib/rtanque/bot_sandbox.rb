@@ -3,21 +3,29 @@ module RTanque
     require 'shikashi'
     include Shikashi
 
-    def initialize(code)
+    def initialize(code, sandboxed = false)
       @code = code
       @bot = nil
+      @sandboxed = sandboxed
     end
 
     def bot
       if @bot
         @bot
       else
-        sandbox = Sandbox.new
-        privs = create_privileges
-        add_helpers sandbox.base_namespace
-        bots = get_diff_in_object_space(RTanque::Bot::Brain) do
-          sandbox.run privs, @code
+        if @sandboxed
+          sandbox = Sandbox.new
+          privs = create_privileges
+          add_helpers sandbox.base_namespace
+          bots = get_diff_in_object_space(RTanque::Bot::Brain) do
+            sandbox.run privs, @code
+          end
+        else
+          bots = get_diff_in_object_space(RTanque::Bot::Brain) do
+            eval @code
+          end
         end
+
         if bots.length == 1
           @bot = bots[0]
         else

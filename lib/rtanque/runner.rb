@@ -1,3 +1,4 @@
+require 'ruby-prof'
 # Add the working directory so that loading of bots works as expected
 $LOAD_PATH << Dir.pwd
 # Add the gem root dir so that sample_bots can be loaded
@@ -19,7 +20,7 @@ module RTanque
     # Attempts to load given {RTanque::Bot::Brain} given its path
     # @param [String] brain_path
     # @raise [RTanque::Runner::LoadError] if brain could not be loaded
-    def add_brain_path(brain_path, name = nil)
+    def add_brain_path(brain_path, name = nil, sandbox: false)
       parsed_path = self.parse_brain_path(brain_path)
       relative_path = File.expand_path parsed_path.path, File.expand_path('../../../', __FILE__)
 
@@ -32,13 +33,13 @@ module RTanque
       end
 
       code = File.read path
-      add_brain_code code, parsed_path.multiplier, name
+      add_brain_code code, parsed_path.multiplier, name, sandbox
     end
 
-    def add_brain_code(code, num_bots = 1, name = nil)
+    def add_brain_code(code, num_bots = 1, name = nil, sandbox = false)
       brains = num_bots.times.map do
         begin
-          BotSandbox.new(code).bot
+          BotSandbox.new(code, sandbox).bot
         rescue ::LoadError
           raise LoadError, 'Failed to load bot from code.'
         end
@@ -49,9 +50,24 @@ module RTanque
     end
 
     # Starts the match
-    def start
-      trap(:INT) { self.match.stop }
-      self.match.start
+    # @param [Boolean] gui if false, runs headless match
+    def start(profile = false)
+        if profile
+          RubyProf.measure_mode = RubyProf::PROCESS_TIME
+          RubyProf.start
+        end
+        # RubyProf.pause
+        trap(:INT) { self.match.stop }
+        self.match.start
+        if profile
+          result = RubyProf.stop
+          printer = RubyProf::FlatPrinterWithLineNumbers.new(result)
+          printer.print(STDOUT)
+        end
+    end
+
+    def recording?
+      !self.recorder.nil?
     end
 
     protected

@@ -28,6 +28,7 @@ Have fun competing against friends' tanks or the sample ones included. Maybe you
   gem.add_dependency 'shikashi'
 
   gem.add_development_dependency 'pry'
+  gem.add_development_dependency 'ruby-prof'
   gem.add_development_dependency 'rspec', '~> 2.13.0'
   gem.add_development_dependency 'rspec-mocks', '~> 2.13.0'
 end
