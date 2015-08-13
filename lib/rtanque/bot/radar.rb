@@ -16,9 +16,9 @@ module RTanque
       # @attr_reader [RTanque::Heading] enemy_heading
       # @attr_reader [Float] enemy_speed
 
-      Reflection = Struct.new(:heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name) do
+      Reflection = Struct.new(:heading, :distance, :enemy_health, :enemy_heading, :enemy_speed, :enemy_name, :enemy_position) do
         def self.new_from_points(from_position, enemy)
-          self.new(from_position.heading(enemy.position), from_position.distance(enemy.position), enemy.health, enemy.heading, enemy.speed, enemy.name)
+          self.new(from_position.heading(enemy.position), from_position.distance(enemy.position), enemy.health, enemy.heading, enemy.speed, enemy.name, enemy.position.clone)
         end
       end
 
