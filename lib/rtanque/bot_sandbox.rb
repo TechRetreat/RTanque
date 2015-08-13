@@ -49,18 +49,19 @@ module RTanque
       privs.object(RTanque::Heading).allow :new_from_degrees, :new_between_points, :delta_between_points, :rand, :new
       privs.object(RTanque::Point).allow :new, :rand, :distance
 
-      privs.instances_of(Class).allow_all
-      privs.instances_of(Object).allow_all
-      privs.instances_of(Enumerator).allow_all
-      privs.instances_of(Enumerable).allow_all
       privs.instances_of(Array).allow_all
-      privs.instances_of(Hash).allow_all
+      privs.instances_of(Class).allow_all
+      privs.instances_of(Comparable).allow_all
+      privs.instances_of(Enumerable).allow_all
+      privs.instances_of(Enumerator).allow_all
       privs.instances_of(Fixnum).allow_all
       privs.instances_of(Float).allow_all
+      privs.instances_of(Hash).allow_all
+      privs.instances_of(NilClass).allow_all
+      privs.instances_of(Object).allow_all
+      privs.instances_of(Range).allow_all
       privs.instances_of(String).allow_all
       privs.instances_of(Symbol).allow_all
-      privs.instances_of(Range).allow_all
-      privs.instances_of(NilClass).allow_all
 
       privs.methods_of(Module).allow :include # Pretty sure include doesn't actually work in the sandbox anyway :/
       privs.methods_of(RTanque::Heading).allow_all
@@ -112,8 +113,7 @@ String
 Struct
 Symbol
 Time
-TrueClass
-Bignum)
+TrueClass)
       all_constants privs, get_constants(RTanque::Heading)
       all_constants privs, get_constants(RTanque::Bot::BrainHelper)
 
