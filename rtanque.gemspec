@@ -25,7 +25,7 @@ Have fun competing against friends' tanks or the sample ones included. Maybe you
   gem.add_dependency 'configuration', '~> 1.3.2'
   gem.add_dependency 'octokit', '~> 2.7.0'
   gem.add_dependency 'thor', '~> 0.18.1'
-  gem.add_dependency 'shikashi'
+  gem.add_dependency 'shikashi-the-north'
 
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'ruby-prof'
