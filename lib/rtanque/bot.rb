@@ -6,6 +6,7 @@ module RTanque
     extend NormalizedAttr
     HEALTH_REDUCTION_ON_EXCEPTION = Configuration.bot.health_reduction_on_exception
     RADIUS = Configuration.bot.radius
+    GUN_RECHARGE = Configuration.bot.gun_recharge
     MAX_GUN_ENERGY = Configuration.bot.gun_energy_max
     GUN_ENERGY_FACTOR = Configuration.bot.gun_energy_factor
     attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy, :killer, :logs, :error, :width
@@ -59,7 +60,7 @@ module RTanque
       else
         @gun_energy -= (self.fire_power**RTanque::Shell::RATIO) * GUN_ENERGY_FACTOR
       end
-      @gun_energy += 1
+      @gun_energy += GUN_RECHARGE
       @gun_energy = MAX_GUN_ENERGY if @gun_energy > MAX_GUN_ENERGY
     end
 
