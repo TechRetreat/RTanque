@@ -47,6 +47,10 @@ module RTanque
 
     def pre_bot_tick(bot)
       bot.radar.scan(self.bots.all_but(bot))
+      bot.hits(self.bots.all_but(bot)) do |hit|
+        bot.reduce_health Configuration.bot.health_reduction_on_collision
+        bot.speed = -bot.speed
+      end
     end
 
     def post_bot_tick(bot)

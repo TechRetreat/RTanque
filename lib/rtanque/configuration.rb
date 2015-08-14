@@ -13,6 +13,7 @@ module RTanque
     bot do
       radius 19
       health_reduction_on_exception 4
+      health_reduction_on_collision 10
       health 0..100
       speed -3 * speed_factor..3 * speed_factor
       speed_step 0.05 * speed_factor

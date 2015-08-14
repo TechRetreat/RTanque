@@ -137,5 +137,16 @@ module RTanque
     def log(message)
       @logs << message
     end
+
+    def hits(bots, &on_hit)
+      half_move = self.position.clone
+      half_move.move(self.heading, self.speed/2)
+      bots.each do |hit_bot|
+        if hit_bot.position.within_radius?(self.position, Bot::RADIUS) || hit_bot.position.within_radius?(half_move, Bot::RADIUS)
+          on_hit.call(hit_bot) if on_hit
+          break
+        end
+      end
+    end
   end
 end
