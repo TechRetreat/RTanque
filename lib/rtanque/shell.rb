@@ -34,9 +34,9 @@ module RTanque
     end
 
     def hits(bots, &on_hit)
+      half_move = self.position.clone
+      half_move.move(self.heading, self.speed/2)
       bots.each do |hit_bot|
-        half_move = self.position.clone
-        half_move.move(self.heading, self.speed/2)
         if hit_bot.position.within_radius?(self.position, Bot::RADIUS) || hit_bot.position.within_radius?(half_move, Bot::RADIUS)
           self.dead!
           on_hit.call(self.bot, hit_bot) if on_hit
