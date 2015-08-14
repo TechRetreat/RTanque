@@ -11,6 +11,7 @@ module RTanque
     #  * {file:sample_bots/keyboard.rb Keyboard} Special bot controlled by the keyboard
     #
     class Brain
+      include BrainHelper
       # Bot's display name
       # @!parse NAME = 'bot name'
 
