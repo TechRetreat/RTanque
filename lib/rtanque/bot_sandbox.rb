@@ -3,7 +3,7 @@ module RTanque
     require 'shikashi'
     include Shikashi
 
-    def initialize(code, sandboxed = false)
+    def initialize(code, sandboxed = true)
       @code = code
       @bot = nil
       @sandboxed = sandboxed
