@@ -26,8 +26,6 @@ module RTanque
           end
           botName = bots[0].to_s.split('::').last
           newBotName = "BestBotEver" << Kernel.rand(100000).to_s
-          puts botName
-          puts newBotName
           self.redef_class(botName, newBotName)
           bots = [self.class.const_get(newBotName)]
         end
@@ -47,12 +45,6 @@ module RTanque
       self.class.send(:remove_const, const)
       self.class.const_set(new_const, tmp)
     end
-
-    # def string_to_class(str)
-    #   str.split('::').inject(Object) do |mod, class_name|
-    #     mod.const_get(class_name)
-    #   end
-    # end
 
     def add_helpers(namespace)
       namespace.const_set :BOT_RADIUS, Bot::RADIUS
