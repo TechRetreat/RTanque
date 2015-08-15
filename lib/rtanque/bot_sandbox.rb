@@ -24,6 +24,10 @@ module RTanque
           bots = get_diff_in_object_space(RTanque::Bot::Brain) do
             eval @code
           end
+          botName = bots[0].to_s.split('::').last
+          newBotName = "BestBotEver" << Kernel.rand(100000).to_s
+          self.redef_class(botName, newBotName)
+          bots = [self.class.const_get(newBotName)]
         end
 
         if bots.length == 1
@@ -35,6 +39,12 @@ module RTanque
     end
 
     protected
+
+    def redef_class(const, new_const)
+      tmp = self.class.const_get(const)
+      self.class.send(:remove_const, const)
+      self.class.const_set(new_const, tmp)
+    end
 
     def add_helpers(namespace)
       namespace.const_set :BOT_RADIUS, Bot::RADIUS
