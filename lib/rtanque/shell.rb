@@ -41,7 +41,7 @@ module RTanque
       two_thirds_move = self.position.clone
       two_thirds_move.move(self.heading, self.speed * 2.to_f / 3.to_f)
       bots.each do |hit_bot|
-        if hit_bot.position.within_radius?(self.position, Bot::RADIUS) || hit_bot.position.within_radius?(half_move, Bot::RADIUS) || hit_bot.position.within_radius?(third_move, Bot::RADIUS) || hit_bot.position.within_radius?(two_thirds_move, Bot::Radius)
+        if hit_bot.position.within_radius?(self.position, Bot::RADIUS) || hit_bot.position.within_radius?(half_move, Bot::RADIUS) || hit_bot.position.within_radius?(third_move, Bot::RADIUS) || hit_bot.position.within_radius?(two_thirds_move, Bot::RADIUS)
           self.dead!
           on_hit.call(self.bot, hit_bot) if on_hit
           break
