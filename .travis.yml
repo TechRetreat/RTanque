@@ -8,3 +8,5 @@ rvm:
 branches:
   only:
     - master
+notifications:
+  slack: techtanks:wIFRNa31SD4RZUhNN72umfr5
